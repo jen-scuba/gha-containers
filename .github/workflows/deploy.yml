@@ -11,17 +11,19 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    container:    # container to run the tests in - not technically needed
-      image: node:16 
+    # container:    # container to run the tests in - not technically needed
+    #   image: node:16
     env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb          # mongodb+srv before adding services below
-      MONGODB_CLUSTER_ADDRESS: cluster0.ntrwp.mongodb.net
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      MONGODB_CONNECTION_PROTOCOL: mongodb         # mongodb+srv before adding services below
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017  #cluster0.ntrwp.mongodb.net
+      MONGODB_USERNAME: root                    #${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: example                 #${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
     services:  # service container - dockerhub image
       mongodb:
         image: mongo
+        ports:   # added to run tests on gha runner with service container mondgodb
+          - 27017:27017
         env: 
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
